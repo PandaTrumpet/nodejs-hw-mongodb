@@ -24,26 +24,39 @@ export const setupServer = () => {
     });
   });
   app.get('/contacts', async (req, res) => {
-    const contacts = await getAllContacts();
-    res.status(200).json({
-      data: contacts,
-      message: 'Successfully found contacts!',
-      status: `200`,
-    });
+    try {
+      const contacts = await getAllContacts();
+      res.status(200).json({
+        data: contacts,
+        message: 'Successfully found contacts!',
+        status: `200`,
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(404).json({ message: 'Not found' });
+    }
   });
 
   app.get('/contacts/:contactId', async (req, res) => {
     const { contactId } = req.params;
-    const contact = await getContactById(contactId);
-    if (!contact) {
-      res.status(404).json({
-        message: 'Not found',
+
+    try {
+      const contact = await getContactById(contactId);
+      if (!contact) {
+        res.status(500).json({
+          message: 'Internal Server Error',
+        });
+      }
+      res.status(200).json({
+        data: contact,
+        message: `Successfully found contact with id ${contactId}!`,
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).json({
+        message: 'Internal Server Error',
       });
     }
-    res.status(200).json({
-      data: contact,
-      message: `Successfully found contact with id ${contactId}!`,
-    });
   });
   app.use((req, res, next) => {
     res.status(404).json({
