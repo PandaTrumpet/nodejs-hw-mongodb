@@ -29,7 +29,7 @@ export const setupServer = () => {
       res.status(200).json({
         data: contacts,
         message: 'Successfully found contacts!',
-        status: `200`,
+        status: 200,
       });
     } catch (error) {
       console.log(error.message);
@@ -43,18 +43,19 @@ export const setupServer = () => {
     try {
       const contact = await getContactById(contactId);
       if (!contact) {
-        res.status(500).json({
-          message: 'Internal Server Error',
+        res.status(400).json({
+          message: 'Not found',
         });
       }
       res.status(200).json({
         data: contact,
+        status: 200,
         message: `Successfully found contact with id ${contactId}!`,
       });
     } catch (error) {
       console.log(error.message);
-      res.status(500).json({
-        message: 'Internal Server Error',
+      res.status(400).json({
+        message: 'Not found',
       });
     }
   });
