@@ -54,7 +54,7 @@ export const setupServer = () => {
       });
     } catch (error) {
       console.log(error.message);
-      res.status(400).json({
+      res.status(404).json({
         message: 'Not found',
       });
     }
