@@ -3,7 +3,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { env } from './utils/env.js';
-// import { getAllContacts, getContactById } from './services/contact.js';
 import contactRouter from './routers/contacts.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
