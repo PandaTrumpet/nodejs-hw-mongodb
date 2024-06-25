@@ -9,9 +9,9 @@ export const errorHandler = (error, _, res, next) => {
     });
     return;
   }
-  res.status(500).json({
-    status: 500,
+  res.status(404).json({
+    status: 404,
     message: 'Something went wrong',
-    data: error.message,
+    data: { message: 'Contact not found' },
   });
 };
