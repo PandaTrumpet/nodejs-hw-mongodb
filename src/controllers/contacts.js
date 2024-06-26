@@ -15,6 +15,7 @@ export const getAllContactsController = async (req, res) => {
     data: contacts,
   });
 };
+
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
 
@@ -29,11 +30,8 @@ export const getContactByIdController = async (req, res) => {
     message: `Successfully found contact with id ${contactId}!`,
     data: contact,
   });
-
-  res.status(500).json({
-    message: 'Internal Server Error',
-  });
 };
+
 export const addContactController = async (req, res) => {
   const contact = await addContact(req.body);
   res.status(201).json({
