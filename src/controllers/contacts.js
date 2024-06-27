@@ -21,8 +21,10 @@ export const getContactByIdController = async (req, res) => {
 
   const contact = await getContactById(contactId);
   if (!contact) {
-    res.status(500).json({
-      message: 'Internal Server Error',
+    return res.status(404).json({
+      status: 404,
+      message: 'Contact not found',
+      data: { message: 'Contact not found' },
     });
   }
   res.status(200).json({
@@ -43,7 +45,7 @@ export const addContactController = async (req, res) => {
 export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
   const contact = await patchContact({ _id: contactId }, req.body, {
-    upsert: true,
+    // upsert: true,
   });
   if (!contact) {
     throw createHttpError(404, {

@@ -14,4 +14,5 @@ export const errorHandler = (error, _, res, next) => {
     message: 'Something went wrong',
     data: { message: 'Contact not found' },
   });
+  next();
 };
