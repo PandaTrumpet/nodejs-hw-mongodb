@@ -42,16 +42,18 @@ export const addContactController = async (req, res) => {
     data: contact,
   });
 };
-export const patchContactController = async (req, res) => {
+export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await patchContact({ _id: contactId }, req.body, {
+  const contact = await patchContact(contactId, req.body, {
     // upsert: true,
   });
   if (!contact) {
-    throw createHttpError(404, {
-      status: 404,
-      message: 'Not found',
-    });
+    return next(
+      createHttpError(404, {
+        status: 404,
+        message: 'Not found',
+      }),
+    );
   }
   res.status(200).json({
     status: 200,
