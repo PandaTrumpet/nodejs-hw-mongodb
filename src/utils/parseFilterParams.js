@@ -6,11 +6,11 @@ const parseBoolean = (value) => {
   const parseValue = Boolean(value);
   return parseValue;
 };
-const parseFilterContactsParams = ({ type, isFavourite }) => {
-  const parsedType = contactTypeList.includes(type) ? type : null;
+const parseFilterContactsParams = ({ contactType, isFavourite }) => {
+  const parsedType = contactTypeList.includes(contactType) ? contactType : null;
   const parsedIsFavourite = parseBoolean(isFavourite);
   return {
-    type: parsedType,
+    contactType: parsedType,
     isFavourite: parsedIsFavourite,
   };
 };

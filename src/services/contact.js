@@ -10,16 +10,23 @@ export const getAllContacts = async ({
   const limit = perPage;
   const skip = (page - 1) * perPage;
   const contactsQuery = ContactCollection.find();
-  const totalItems = await ContactCollection.find()
-    .merge(contactsQuery)
-    .countDocuments();
 
+  if (filter.contactType) {
+    contactsQuery.where('contactType').equals(filter.contactType);
+  }
+  if (filter.isFavourite) {
+    contactsQuery.where('isFavourite').equals(filter.isFavourite);
+  }
   const contacts = await contactsQuery
     .find()
     .skip(skip)
     .limit(limit)
     .sort({ [sortBy]: sortOrder });
-
+  const totalItems = await ContactCollection.find()
+    .merge(contactsQuery)
+    .where('isFavourie')
+    .equals(filter.isFavourite)
+    .countDocuments();
   const { totalPages, hasNextPage, hasPreviousPage } =
     callculatedPaginationData({
       total: totalItems,
