@@ -10,11 +10,19 @@ import { errorHandler } from '../middleware/errorHandler.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { contactsFiledList } from '../constans/contactsFiledList.js';
+import parseFilterContactsParams from '../utils/parseFilterParams.js';
 export const getAllContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query, contactsFiledList);
+  const filter = parseFilterContactsParams(req.query);
 
-  const data = await getAllContacts({ page, perPage, sortBy, sortOrder });
+  const data = await getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
