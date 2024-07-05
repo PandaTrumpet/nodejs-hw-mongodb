@@ -24,9 +24,10 @@ export const getAllContacts = async ({
     .sort({ [sortBy]: sortOrder });
   const totalItems = await ContactCollection.find()
     .merge(contactsQuery)
-    .where('isFavourie')
+    .where('isFavourite')
     .equals(filter.isFavourite)
     .countDocuments();
+
   const { totalPages, hasNextPage, hasPreviousPage } =
     callculatedPaginationData({
       total: totalItems,
