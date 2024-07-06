@@ -10,3 +10,4 @@ authRouter.post(
   validateBody(userRegisterSchema),
   ctrlWrapper(registerUserContrller),
 );
+export default authRouter;

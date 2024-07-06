@@ -6,6 +6,8 @@ import { env } from './utils/env.js';
 import contactRouter from './routers/contacts.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
+import authRouter from './routers/auth.js';
+
 dotenv.config();
 const PORT = Number(env('PORT', '3000'));
 
@@ -25,6 +27,7 @@ export const setupServer = () => {
       message: 'Hello world',
     });
   });
+  app.use(authRouter);
   app.use(contactRouter);
 
   app.use(notFoundHandler);
