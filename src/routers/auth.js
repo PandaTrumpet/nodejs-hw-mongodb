@@ -7,6 +7,7 @@ import {
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   loginUserController,
+  refreshController,
   registerUserContrller,
 } from '../controllers/auth-controller.js';
 const authRouter = Router();
@@ -19,7 +20,9 @@ authRouter.post(
 export default authRouter;
 
 authRouter.post(
-  'login',
+  '/login',
   validateBody(userLoginSchema),
   ctrlWrapper(loginUserController),
 );
+
+authRouter.post('/refresh', ctrlWrapper(refreshController));

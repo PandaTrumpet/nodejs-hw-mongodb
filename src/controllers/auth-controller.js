@@ -1,6 +1,21 @@
 import createHttpError from 'http-errors';
-import { findUser, loginUser, registerUser } from '../services/auth.js';
-
+import { findUser, registerUser } from '../services/auth.js';
+// import { THIRTY_DAYS } from '../constans/index.js';
+import { compareHash } from '../utils/hash.js';
+import { createSession, findSession } from '../services/session.js';
+const setupResponseSession = (
+  res,
+  { refreshToken, refreshTokenValidUntil, _id },
+) => {
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    expires: refreshTokenValidUntil,
+  });
+  res.cookie('sessionId', _id, {
+    httpOnly: true,
+    expires: refreshTokenValidUntil,
+  });
+};
 export const registerUserContrller = async (req, res) => {
   const { email } = req.body; //достаем почту,диструктуризируя его
   const user = await findUser({ email });
@@ -19,5 +34,48 @@ export const registerUserContrller = async (req, res) => {
 };
 
 export const loginUserController = async (req, res) => {
-  await loginUser(req.body);
+  const { email, password } = req.body;
+  const user = await findUser({ email });
+  if (!user) {
+    throw createHttpError(404, 'Email not found');
+  }
+
+  const passwordCompare = await compareHash(password, user.password);
+
+  if (!passwordCompare) {
+    throw createHttpError(404, 'Password invalid');
+  }
+  const session = await createSession(user._id);
+  // if (!session) {
+  //   throw createHttpError(404, 'Have no sessiom');
+  // }
+  console.log(session.accessToken);
+  setupResponseSession(res, session);
+  res.status(200).json({
+    satus: 200,
+    message: 'Successfully logged in an user!',
+    data: { accessToken: session.accessToken },
+  });
+};
+
+export const refreshController = async (req, res) => {
+  const { sessionId, refreshToken } = req.cookies;
+  const currentSession = await findSession({ _id: sessionId, refreshToken });
+  if (!currentSession) {
+    throw createHttpError(401, 'Session not found');
+  }
+  // console.log(currentSession);
+  const refreshTokenExpired =
+    new Date() > new Date(currentSession.refreshTokenValidUntil);
+  if (refreshTokenExpired) {
+    throw createHttpError(401, 'Session expired');
+  }
+
+  const newSession = await createSession(currentSession.userId);
+  setupResponseSession(res, newSession);
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: { accessToken: newSession.accessToken },
+  });
 };
