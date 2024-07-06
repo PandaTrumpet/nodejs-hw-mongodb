@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { findUser, registerUser } from '../services/auth.js';
+import { findUser, loginUser, registerUser } from '../services/auth.js';
 
 export const registerUserContrller = async (req, res) => {
   const { email } = req.body; //достаем почту,диструктуризируя его
@@ -16,4 +16,8 @@ export const registerUserContrller = async (req, res) => {
     message: 'Successfully registered a user!',
     data,
   });
+};
+
+export const loginUserController = async (req, res) => {
+  await loginUser(req.body);
 };
