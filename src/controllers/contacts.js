@@ -49,16 +49,27 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
-  const contact = await addContact(req.body);
+  // const contact = await addContact(req.body);
+  // res.status(201).json({
+  //   status: 201,
+  //   message: 'Successfully created a contact!',
+  //   data: contact,
+  // });
+  // console.log(req.user);
+
+  const { _id: userId } = req.user;
+  const result = await addContact({ ...req.body, userId });
+
   res.status(201).json({
-    status: 201,
+    status: 200,
     message: 'Successfully created a contact!',
-    data: contact,
+    data: result,
   });
 };
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await patchContact(contactId, req.body, {
+  const { _id: userId } = req.user;
+  const contact = await patchContact({ id: contactId, userId }, req.body, {
     // upsert: true,
   });
   if (!contact) {
@@ -78,7 +89,9 @@ export const patchContactController = async (req, res, next) => {
 
 export const deleteContactController = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await deleteContact(contactId);
+  const { _id: userId } = req.user;
+
+  const contact = await deleteContact({ id: contactId, userId });
   if (!contact) {
     throw errorHandler(404, 'Contact not found');
   }
