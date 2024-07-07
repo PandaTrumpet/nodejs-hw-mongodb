@@ -7,6 +7,7 @@ import {
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   loginUserController,
+  logoutController,
   refreshController,
   registerUserContrller,
 } from '../controllers/auth-controller.js';
@@ -26,3 +27,4 @@ authRouter.post(
 );
 
 authRouter.post('/refresh', ctrlWrapper(refreshController));
+authRouter.post('/logout', ctrlWrapper(logoutController));

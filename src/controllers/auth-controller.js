@@ -2,7 +2,11 @@ import createHttpError from 'http-errors';
 import { findUser, registerUser } from '../services/auth.js';
 // import { THIRTY_DAYS } from '../constans/index.js';
 import { compareHash } from '../utils/hash.js';
-import { createSession, findSession } from '../services/session.js';
+import {
+  createSession,
+  deleteSession,
+  findSession,
+} from '../services/session.js';
 const setupResponseSession = (
   res,
   { refreshToken, refreshTokenValidUntil, _id },
@@ -78,4 +82,18 @@ export const refreshController = async (req, res) => {
     message: 'Successfully refreshed a session!',
     data: { accessToken: newSession.accessToken },
   });
+};
+
+export const logoutController = async (req, res) => {
+  const { sessionId } = req.cookies;
+  if (!sessionId) {
+    throw createHttpError(401, 'Session not found');
+  }
+
+  await deleteSession({ _id: sessionId });
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
+  // console.log(sessionId);
 };
