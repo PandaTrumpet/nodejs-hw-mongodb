@@ -29,8 +29,8 @@ export const setupServer = () => {
       message: 'Hello world',
     });
   });
-  app.use(authRouter);
-  app.use(contactRouter);
+  app.use('/auth', authRouter);
+  app.use('/contacts', contactRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

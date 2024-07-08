@@ -17,25 +17,25 @@ import { authenticate } from '../middleware/authenticate.js';
 const contactRouter = Router();
 contactRouter.use(authenticate);
 
-contactRouter.get('/contacts', ctrlWrapper(getAllContactsController));
+contactRouter.get('/', ctrlWrapper(getAllContactsController));
 
 contactRouter.get(
-  '/contacts/:contactId',
+  '/:contactId',
 
   ctrlWrapper(getContactByIdController),
 );
 contactRouter.post(
-  '/contacts',
+  '/',
   validateBody(createContactSchema),
   ctrlWrapper(addContactController),
 );
 contactRouter.patch(
-  '/contacts/:contactId',
+  '/:contactId',
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
 contactRouter.delete(
-  '/contacts/:contactId',
+  '/:contactId',
 
   ctrlWrapper(deleteContactController),
 );
