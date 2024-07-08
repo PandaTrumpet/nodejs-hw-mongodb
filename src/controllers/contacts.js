@@ -33,8 +33,8 @@ export const getAllContactsController = async (req, res) => {
 
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-
-  const contact = await getContactById(contactId);
+  const { _id: userId } = req.user;
+  const contact = await getContactById({ _id: contactId, userId });
   if (!contact) {
     return res.status(404).json({
       status: 404,
