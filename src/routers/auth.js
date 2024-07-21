@@ -10,7 +10,9 @@ import {
   logoutController,
   refreshController,
   registerUserContrller,
+  requestResetEmailController,
 } from '../controllers/auth-controller.js';
+import { requestResetEmailSchema } from '../validation/auth.js';
 const authRouter = Router();
 
 authRouter.post(
@@ -26,5 +28,10 @@ authRouter.post(
   ctrlWrapper(loginUserController),
 );
 
+authRouter.post(
+  '/send-reset-email',
+  validateBody(requestResetEmailSchema),
+  ctrlWrapper(requestResetEmailController),
+);
 authRouter.post('/refresh', ctrlWrapper(refreshController));
 authRouter.post('/logout', ctrlWrapper(logoutController));
