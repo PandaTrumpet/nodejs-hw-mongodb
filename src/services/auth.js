@@ -34,9 +34,7 @@ export const requestResetToken = async (email) => {
       expiresIn: '5m',
     },
   );
-  // if (!resetToken) {
-  //   throw createHttpError(401, 'Token is expired or invalid.');
-  // }
+
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
     'reset-password-email.html',
@@ -49,6 +47,12 @@ export const requestResetToken = async (email) => {
     name: user.name,
     link: `${env('APP_DOMAIN')}/reset-password?token=${resetToken}`,
   });
+  if (!html) {
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
   await sendEmail({
     from: env(SMTP.SMTP_FROM),
     to: email,

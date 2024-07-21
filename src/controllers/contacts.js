@@ -11,6 +11,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { contactsFiledList } from '../constans/contactsFiledList.js';
 import parseFilterContactsParams from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 export const getAllContactsController = async (req, res) => {
   const { _id: userId } = req.user;
   const { page, perPage } = parsePaginationParams(req.query);
@@ -50,16 +51,13 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const addContactController = async (req, res) => {
-  // const contact = await addContact(req.body);
-  // res.status(201).json({
-  //   status: 201,
-  //   message: 'Successfully created a contact!',
-  //   data: contact,
-  // });
-  // console.log(req.user);
-
   const { _id: userId } = req.user;
-  const result = await addContact({ ...req.body, userId });
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+  const result = await addContact({ ...req.body, photo: photoUrl, userId });
 
   res.status(201).json({
     status: 200,
@@ -70,9 +68,18 @@ export const addContactController = async (req, res) => {
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const { _id: userId } = req.user;
-  const contact = await patchContact(contactId, { userId }, req.body, {
-    // upsert: true,
-  });
+  const photo = req.file;
+
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+  const contact = await patchContact(
+    contactId,
+    { userId },
+    { ...req.body, photo: photoUrl },
+  );
+  console.log(photoUrl);
   if (!contact) {
     return next(
       createHttpError(404, {
@@ -81,6 +88,7 @@ export const patchContactController = async (req, res, next) => {
       }),
     );
   }
+
   res.status(200).json({
     status: 200,
     message: 'Successfully patched a contact!',

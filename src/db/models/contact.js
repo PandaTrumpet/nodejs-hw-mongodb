@@ -28,6 +28,9 @@ export const contactSchema = new Schema(
       ref: 'user',
       required: true,
     },
+    photo: {
+      type: String,
+    },
   },
   {
     timestamps: true,
