@@ -9,6 +9,7 @@ import { sendEmail } from '../utils/sendEmail.js';
 import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+
 export const findUser = (filter) => UserCollection.findOne(filter);
 
 export const registerUser = async (data) => {
@@ -33,6 +34,9 @@ export const requestResetToken = async (email) => {
       expiresIn: '5m',
     },
   );
+  // if (!resetToken) {
+  //   throw createHttpError(401, 'Token is expired or invalid.');
+  // }
   const resetPasswordTemplatePath = path.join(
     TEMPLATES_DIR,
     'reset-password-email.html',
@@ -58,7 +62,8 @@ export const resetPassword = async (payload) => {
   try {
     entries = jwt.verify(payload.token, env('JWT_SECRET'));
   } catch (error) {
-    if (error instanceof Error) throw createHttpError(401, error.message);
+    if (error instanceof Error)
+      throw createHttpError(401, 'Token is expired or invalid.');
     throw error;
   }
   const user = await UserCollection.findOne({
