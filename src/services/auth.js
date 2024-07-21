@@ -1,6 +1,11 @@
 import { UserCollection } from '../db/models/User.js';
 import createHttpError from 'http-errors';
 import { hashValue } from '../utils/hash.js';
+import jwt from 'jsonwebtoken';
+
+import { SMTP } from '../constans/index.js';
+import { env } from '../utils/env.js';
+import { sendEmail } from '../utils/sendEmail.js';
 export const findUser = (filter) => UserCollection.findOne(filter);
 
 export const registerUser = async (data) => {
@@ -15,6 +20,21 @@ export const requestResetToken = async (email) => {
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
+  const resetToken = jwt.sign(
+    {
+      sub: user._id,
+      email,
+    },
+    env('JWT_SECRET'),
+    {
+      expiresIn: '15m',
+    },
+  );
 
-  //доповнимо її трохи пізніше
+  await sendEmail({
+    from: env(SMTP.SMTP_FROM),
+    to: email,
+    subject: 'Reset your password',
+    html: `<p>Click <a href="${resetToken}">here</a> to reset your password!</p>`,
+  });
 };
