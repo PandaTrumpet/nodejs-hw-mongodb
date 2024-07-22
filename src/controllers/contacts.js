@@ -85,9 +85,10 @@ export const patchContactController = async (req, res, next) => {
     }
   }
   const contact = await patchContact(
-    contactId,
-    { userId },
+    { _id: contactId, userId },
     { ...req.body, photo: photoUrl },
+
+    { upsert: true },
   );
   // console.log(photoUrl);
   if (!contact) {
