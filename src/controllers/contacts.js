@@ -89,7 +89,7 @@ export const patchContactController = async (req, res, next) => {
     { userId },
     { ...req.body, photo: photoUrl },
   );
-  console.log(photoUrl);
+  // console.log(photoUrl);
   if (!contact) {
     return next(
       createHttpError(404, {

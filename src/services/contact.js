@@ -67,6 +67,7 @@ export const patchContact = async (contactId, data, options = {}) => {
       ...options,
     },
   );
+  // console.log(contact.value);
   if (!contact || !contact.value) return null;
   return {
     data: contact.value,
