@@ -42,7 +42,6 @@ export const getAllContacts = async ({
     page,
     perPage,
     totalItems,
-
     totalPages,
     hasNextPage,
     hasPreviousPage,
