@@ -33,7 +33,7 @@ requestBody:
             enum: ['work', 'home', 'personal']
             example: 'work'
           isFavourite:
-            description: Is contact favourite?"
+            description: Is contact favourite?
             type: boolean
             example: true
           photo:
