@@ -13,9 +13,7 @@ requestBody:
         required:
           - name
           - phoneNumber
-          - email
           - contactType
-          - photo
         properties:
           name:
             description: "Contact's name"
@@ -34,6 +32,10 @@ requestBody:
             type: string
             enum: ['work', 'home', 'personal']
             example: 'work'
+          isFavourite:
+            description: Is contact favourite?"
+            type: boolean
+            example: true
           photo:
             description: "Contact's photo"
             type: string
