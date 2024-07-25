@@ -39,6 +39,10 @@ requestBody:
             description: "Contact's photo"
             type: string
             format: binary
+          isFavourite:
+            description: Is contact favourite?"
+            type: boolean
+            example: true
 responses:
   '200':
     description: Successfully patched a contact!
