@@ -40,7 +40,7 @@ requestBody:
             type: string
             format: binary
           isFavourite:
-            description: Is contact favourite?"
+            description: Is contact favourite?
             type: boolean
             example: true
 responses:

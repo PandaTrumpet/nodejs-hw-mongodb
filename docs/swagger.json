@@ -217,7 +217,7 @@
                     "example": "work"
                   },
                   "isFavourite": {
-                    "description": "Is contact favourite?\"",
+                    "description": "Is contact favourite?",
                     "type": "boolean",
                     "example": true
                   },
@@ -387,7 +387,7 @@
                     "format": "binary"
                   },
                   "isFavourite": {
-                    "description": "Is contact favourite?\"",
+                    "description": "Is contact favourite?",
                     "type": "boolean",
                     "example": true
                   }
